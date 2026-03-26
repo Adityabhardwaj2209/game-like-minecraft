@@ -149,7 +149,7 @@ export function StartScreen({ onStart }) {
           ⛏️ VOXEL WORLD
         </div>
         <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 16, letterSpacing: 4, textTransform: 'uppercase' }}>
-          Build. Explore. Survive.
+          Story. Build. Survive.
         </div>
       </div>
 
@@ -215,7 +215,7 @@ export function StartScreen({ onStart }) {
       <div style={{
         position: 'absolute', bottom: 30, display: 'flex', gap: 12, zIndex: 2, flexWrap: 'wrap', justifyContent: 'center', padding: '0 20px'
       }}>
-        {['🌍 Open World', '☠️ Skeleton Enemies', '🌙 Day/Night Cycle', '🔫 Combat', '🌧️ Dynamic Weather', '🗺️ Minimap', '⚔️ Missions'].map(tag => (
+        {['🌍 Open World', '🎬 Story Mode', '☠️ Skeleton Enemies', '🌙 Day/Night Cycle', '🔫 Combat', '🚗 Island Transport', '⚔️ Missions'].map(tag => (
           <span key={tag} style={{
             background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)',
             borderRadius: 20, padding: '5px 14px', color: 'rgba(255,255,255,0.55)', fontSize: 12

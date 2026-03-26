@@ -55,6 +55,8 @@ const PlayerAvatar = () => {
 export function Player({ onBlockBreak }) {
   const { camera } = useThree()
   const { moveForward, moveBackward, moveLeft, moveRight, jump } = useKeyboard()
+  const isTraveling = useGameStore(s => s.isTraveling)
+  const cinematicMode = useGameStore(s => s.cinematicMode)
   
   const velocity = useRef(new Vector3(0, 0, 0))
   const isGrounded = useRef(false)
@@ -101,6 +103,22 @@ export function Player({ onBlockBreak }) {
   }, [])
 
   useFrame((state, delta) => {
+    const pendingTeleport = useGameStore.getState().pendingTeleport
+    if (pendingTeleport) {
+      position.current.set(pendingTeleport[0], pendingTeleport[1], pendingTeleport[2])
+      velocity.current.set(0, 0, 0)
+      isGrounded.current = false
+      useGameStore.getState().consumeTeleport()
+    }
+
+    if (isTraveling || cinematicMode) {
+      playerPosRef.current[0] = position.current.x
+      playerPosRef.current[1] = position.current.y
+      playerPosRef.current[2] = position.current.z
+      camera.position.copy(position.current)
+      return
+    }
+
     // Basic Custom Physics
     velocity.current.y -= GRAVITY * delta
 

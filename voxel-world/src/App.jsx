@@ -4,7 +4,6 @@ import { EffectComposer, SSAO } from '@react-three/postprocessing'
 import { Player } from './components/Player.jsx'
 import { Cubes } from './components/Cubes.jsx'
 import { Hotbar } from './components/Hotbar.jsx'
-import { ChallengeUI } from './components/ChallengeUI.jsx'
 import { Minimap } from './components/Minimap.jsx'
 import { NPCs } from './components/NPCs.jsx'
 import { DayNightCycle } from './components/DayNightCycle.jsx'
@@ -19,6 +18,9 @@ import { EnemyBase } from './components/EnemyBase.jsx'
 import { MissionHUD } from './components/MissionHUD.jsx'
 import { Drops } from './components/Drops.jsx'
 import { StartScreen } from './components/StartScreen.jsx'
+import { TransportSystem, TransportHUD } from './components/TransportSystem.jsx'
+import { StoryDirector } from './components/StoryDirector.jsx'
+import { StoryCinematics } from './components/StoryCinematics.jsx'
 
 function App() {
   const { particles, setParticles, spawnParticles } = useParticles()
@@ -39,11 +41,13 @@ function App() {
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', zIndex: 10, pointerEvents: 'none', mixBlendMode: 'difference' }}>+</div>
       
       <Hotbar />
-      <ChallengeUI />
       <Minimap />
       <HUD />
       <AmmoStore />
       <MissionHUD />
+      <StoryDirector />
+      <StoryCinematics />
+      <TransportHUD />
 
       <Canvas shadows camera={{ position: [0, 5, 10], fov: 60 }} onContextMenu={(e) => e.preventDefault()}>
         <fog attach="fog" args={['#87CEEB', 15, 50]} />
@@ -58,6 +62,7 @@ function App() {
         <EnemyBase position={[20, 0, 20]} />
         <EnemyBase position={[-25, 0, 10]} />
         <Farming />
+        <TransportSystem />
         <Drops drops={drops} setDrops={setDrops} />
         <ParticleSystem particles={particles} setParticles={setParticles} />
 

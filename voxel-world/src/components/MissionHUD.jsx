@@ -11,6 +11,11 @@ const MissionBadge = ({ mission }) => {
       padding: '12px 16px', color: 'white', minWidth: 260
     }}>
       {/* Title */}
+      {mission.chapter && (
+        <div style={{ fontSize: 11, color: '#8ec5ff', marginBottom: 4, letterSpacing: 0.4 }}>
+          {mission.chapter}
+        </div>
+      )}
       <div style={{ fontWeight: 700, fontSize: 14, letterSpacing: 0.5, color: '#f1c40f', marginBottom: 4 }}>
         {mission.title}
       </div>
@@ -44,12 +49,6 @@ export function MissionHUD() {
   const addScore = useGameStore(s => s.addScore)
 
   const mission = missions[activeMissionIdx]
-  const [showComplete, setShowComplete] = useRef(false) && (() => {
-    const r = useRef(false)
-    const set = (v) => { r.current = v }
-    return [r, set]
-  })()
-
   // Auto-complete detection
   useEffect(() => {
     if (!mission) return
@@ -68,7 +67,7 @@ export function MissionHUD() {
     }}>
       {/* Label */}
       <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', letterSpacing: 1, textTransform: 'uppercase' }}>
-        📋 Active Mission
+        🎬 Story Mode
       </div>
 
       {mission && !allDone ? (

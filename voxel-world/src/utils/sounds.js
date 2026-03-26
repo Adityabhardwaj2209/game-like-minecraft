@@ -236,6 +236,13 @@ export const sounds = {
     })
   },
 
+  // Short radio-like blip for story dialogue ticks
+  radioBlip: () => {
+    const master = getMaster()
+    playOsc(master, 900 + Math.random() * 280, 'square', 0.05, { attack: 0.001, decay: 0.04, pitchDrop: 650 })
+    playNoise(master, 0.03, { type: 'bandpass', freq: 2200, Q: 2 }, 0.03, { decay: 0.025 })
+  },
+
   // Gravelly player hurt grunt
   playerHurt: () => {
     const master = getMaster()
