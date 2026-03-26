@@ -22,18 +22,73 @@ import { StartScreen } from './components/StartScreen.jsx'
 import { TransportSystem, TransportHUD } from './components/TransportSystem.jsx'
 import { StoryDirector } from './components/StoryDirector.jsx'
 import { StoryCinematics } from './components/StoryCinematics.jsx'
+import { Roads } from './components/Roads.jsx'
+import { PlayerNameInput, PlayerNameDisplay } from './components/PlayerNameInput.jsx'
+import { ImprovedNPCSystem } from './components/ImprovedNPCSystem.jsx'
+import { GameSetup, InstallationComplete } from './components/GameSetup.jsx'
+// Temporarily disabled imports to fix blue screen
+// import { BusSystem } from './components/BusSystem.jsx'
+// import { AirportSystem } from './components/AirportSystem.jsx'
+// import { WaterTransport } from './components/WaterTransport.jsx'
+// import { Buildings } from './components/Buildings.jsx'
+// import { HospitalSystem } from './components/HospitalSystem.jsx'
+// import { TrafficSystem } from './components/TrafficSystem.jsx'
+// Temporarily disabled imports to fix blue screen
+// import { StreetLighting } from './components/StreetLighting.jsx'
+// import { PlayerNarration, PlayerHealth } from './components/PlayerNarration.jsx'
+// import { BeachSystem } from './components/BeachSystem.jsx'
+// import { FoodVendorSystem } from './components/FoodVendorSystem.jsx'
+// import { PlayerVehicleSystem } from './components/PlayerVehicleSystem.jsx'
+// import { CompanionSystem } from './components/CompanionSystem.jsx'
 
 function App() {
   const { particles, setParticles, spawnParticles } = useParticles()
   const [drops, setDrops] = useState([])
   const [gameStarted, setGameStarted] = useState(false)
+  const [playerName, setPlayerName] = useState('')
+  const [nameSubmitted, setNameSubmitted] = useState(false)
+  const [setupComplete, setSetupComplete] = useState(false)
+  const [showSetup, setShowSetup] = useState(true)
   const isLowSpec =
     (typeof navigator !== 'undefined' && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
     (typeof navigator !== 'undefined' && navigator.deviceMemory && navigator.deviceMemory <= 4)
 
+  const handleNameSubmit = (name) => {
+    setPlayerName(name)
+    setNameSubmitted(true)
+  }
+
+  const handleGameStart = () => {
+    setGameStarted(true)
+  }
+
+  const handleSetupComplete = () => {
+    setSetupComplete(true)
+    setShowSetup(false)
+  }
+
+  const handlePlayGame = () => {
+    setShowSetup(false)
+    setGameStarted(true)
+  }
+
   return (
     <>
-      {!gameStarted && <StartScreen onStart={() => setGameStarted(true)} />}
+      {/* Setup Wizard */}
+      {showSetup && !setupComplete && <GameSetup onComplete={handleSetupComplete} />}
+      
+      {/* Installation Complete Screen */}
+      {setupComplete && !gameStarted && <InstallationComplete onPlay={handlePlayGame} />}
+      
+      {/* Original Name Input (fallback) */}
+      {!nameSubmitted && !showSetup && <PlayerNameInput onNameSubmit={handleNameSubmit} onStart={handleGameStart} />}
+      
+      {/* Start Screen */}
+      {!gameStarted && nameSubmitted && !showSetup && <StartScreen onStart={handleGameStart} />}
+      
+      {/* Player Name Display */}
+      {gameStarted && nameSubmitted && <PlayerNameDisplay playerName={playerName} />}
+      
       {/* Top-Left Controls */}
       <div style={{ position: 'absolute', top: 10, left: 170, color: 'white', zIndex: 10 }}>
         <h1 style={{ margin: 0, textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>Voxel World</h1>
@@ -52,6 +107,10 @@ function App() {
       <StoryDirector />
       <StoryCinematics />
       <TransportHUD />
+      {/* Temporarily disabled to fix blue screen */}
+      {/* <PlayerNarration />
+      <PlayerHealth />
+      <CompanionSystem /> */}
 
       <Canvas
         shadows
@@ -84,6 +143,21 @@ function App() {
         <TransportSystem />
         <Drops drops={drops} setDrops={setDrops} />
         <ParticleSystem particles={particles} setParticles={setParticles} />
+        
+        {/* Infrastructure Components */}
+        <Roads />
+        <ImprovedNPCSystem />
+        {/* Temporarily disabled to fix blue screen */}
+        {/* <StreetLighting />
+        <TrafficSystem />
+        <PlayerVehicleSystem />
+        <BusSystem />
+        <AirportSystem />
+        <WaterTransport />
+        <Buildings />
+        <HospitalSystem />
+        <BeachSystem />
+        <FoodVendorSystem /> */}
 
         {!isLowSpec && (
           <EffectComposer multisampling={2}>
