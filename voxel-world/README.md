@@ -1,16 +1,89 @@
-# React + Vite
+# Voxel World Story Mode
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A voxel open-world survival/action game built with React + Vite + Three.js (`@react-three/fiber`).
 
-Currently, two official plugins are available:
+This project now includes:
+- Story campaign progression (multi-act missions)
+- Island transport system (car, bus, train, airplane)
+- Combat against night enemies
+- Building/mining mechanics
+- Cinematic mission intros with dialogue, typewriter effect, and skip support
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
 
-## React Compiler
+- React
+- Vite
+- Three.js
+- @react-three/fiber
+- @react-three/drei
+- Zustand (state management)
+- Web Audio API (procedural SFX)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting Started
 
-## Expanding the ESLint configuration
+### 1) Install dependencies
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+```
+
+### 2) Run development server
+
+```bash
+npm run dev
+```
+
+Open the local URL shown in terminal (usually `http://localhost:5173`).
+
+### 3) Build for production
+
+```bash
+npm run build
+```
+
+### 4) Preview production build
+
+```bash
+npm run preview
+```
+
+## Game Controls
+
+- `W A S D` - Move
+- `Space` - Jump
+- `V` - Toggle first/third person
+- `Left Click` - Break block / shoot
+- `Right Click` - Place block
+- `1-5` - Select block type
+- `Esc` - Unlock mouse
+- `Enter` - Skip story cinematic
+
+## Story Mode
+
+Story objectives are shown in the mission HUD:
+- Missions are grouped into acts/chapters
+- Completing a mission advances to the next one automatically
+- Rewards grant score
+- Some objectives require specific travel vehicles (bus/train/airplane)
+- Night survival missions check your health at dawn
+
+## Island Transport
+
+Use the transport panel to travel between islands:
+- Select vehicle type: `car`, `bus`, `train`, `airplane`
+- Go to an island terminal
+- Pick destination
+- Travel begins and you arrive at the destination spawn point
+
+## Cinematic Intros
+
+At each new mission:
+- Letterbox cinematic overlay appears
+- Mission dialogue plays with typewriter text + radio blips
+- Objective hint appears before gameplay resumes
+- Press `Enter` to skip
+
+## Notes
+
+- If port `5173` is busy, Vite will use another port (for example `5174`).
+- Some Three.js deprecation/SSAO warnings can appear in console and do not block gameplay.
