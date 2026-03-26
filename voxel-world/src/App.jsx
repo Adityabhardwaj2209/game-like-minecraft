@@ -25,7 +25,7 @@ import { StoryCinematics } from './components/StoryCinematics.jsx'
 import { Roads } from './components/Roads.jsx'
 import { PlayerNameInput, PlayerNameDisplay } from './components/PlayerNameInput.jsx'
 import { ImprovedNPCSystem } from './components/ImprovedNPCSystem.jsx'
-import { GameSetup, InstallationComplete } from './components/GameSetup.jsx'
+import { QuickSetup, OneClickInstall } from './components/QuickSetup.jsx'
 // Temporarily disabled imports to fix blue screen
 // import { BusSystem } from './components/BusSystem.jsx'
 // import { AirportSystem } from './components/AirportSystem.jsx'
@@ -47,8 +47,8 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false)
   const [playerName, setPlayerName] = useState('')
   const [nameSubmitted, setNameSubmitted] = useState(false)
-  const [setupComplete, setSetupComplete] = useState(false)
-  const [showSetup, setShowSetup] = useState(true)
+  const [showOneClickInstall, setShowOneClickInstall] = useState(true)
+  const [showQuickSetup, setShowQuickSetup] = useState(false)
   const isLowSpec =
     (typeof navigator !== 'undefined' && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
     (typeof navigator !== 'undefined' && navigator.deviceMemory && navigator.deviceMemory <= 4)
@@ -62,29 +62,36 @@ function App() {
     setGameStarted(true)
   }
 
-  const handleSetupComplete = () => {
-    setSetupComplete(true)
-    setShowSetup(false)
+  const handleQuickSetupComplete = (systemInfo) => {
+    setShowQuickSetup(false)
+    // Auto-generate a name if not provided
+    if (!playerName) {
+      setPlayerName('Player')
+      setNameSubmitted(true)
+    }
+    setTimeout(() => {
+      setGameStarted(true)
+    }, 1000)
   }
 
-  const handlePlayGame = () => {
-    setShowSetup(false)
-    setGameStarted(true)
+  const handleOneClickInstall = () => {
+    setShowOneClickInstall(false)
+    setShowQuickSetup(true)
   }
 
   return (
     <>
-      {/* Setup Wizard */}
-      {showSetup && !setupComplete && <GameSetup onComplete={handleSetupComplete} />}
+      {/* One-Click Install Screen */}
+      {showOneClickInstall && <OneClickInstall onInstall={handleOneClickInstall} />}
       
-      {/* Installation Complete Screen */}
-      {setupComplete && !gameStarted && <InstallationComplete onPlay={handlePlayGame} />}
+      {/* Quick Setup Process */}
+      {showQuickSetup && <QuickSetup onComplete={handleQuickSetupComplete} />}
       
       {/* Original Name Input (fallback) */}
-      {!nameSubmitted && !showSetup && <PlayerNameInput onNameSubmit={handleNameSubmit} onStart={handleGameStart} />}
+      {!nameSubmitted && !showOneClickInstall && !showQuickSetup && <PlayerNameInput onNameSubmit={handleNameSubmit} onStart={handleGameStart} />}
       
       {/* Start Screen */}
-      {!gameStarted && nameSubmitted && !showSetup && <StartScreen onStart={handleGameStart} />}
+      {!gameStarted && nameSubmitted && !showOneClickInstall && !showQuickSetup && <StartScreen onStart={handleGameStart} />}
       
       {/* Player Name Display */}
       {gameStarted && nameSubmitted && <PlayerNameDisplay playerName={playerName} />}
