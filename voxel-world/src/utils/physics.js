@@ -26,3 +26,15 @@ export const getHighestBlockY = (x, z, map) => {
   }
   return 0 // Fallback
 }
+
+export const getHighestWalkableBlockY = (x, z, map) => {
+  const rX = Math.round(x)
+  const rZ = Math.round(z)
+  for (let y = 30; y >= -10; y--) {
+    const block = map[`${rX},${y},${rZ}`]
+    if (!block) continue
+    if (block.type === 'water' || block.type === 'leaves') continue
+    return y
+  }
+  return 0
+}

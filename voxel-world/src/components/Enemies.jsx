@@ -115,8 +115,12 @@ export function Enemies() {
 
         // Leg walking animation
         const legRot = Math.sin(Date.now() * 0.01) * 0.5
-        ref.children[0].children[5].rotation.x = -legRot
-        ref.children[0].children[6].rotation.x = legRot
+        const enemyMesh = ref.children[0]
+        if (enemyMesh && enemyMesh.children.length >= 6) {
+          // EnemyMesh legs are child indexes 4 and 5.
+          enemyMesh.children[4].rotation.x = -legRot
+          enemyMesh.children[5].rotation.x = legRot
+        }
 
         // Attack if close
         if (dist < ATTACK_RANGE) {

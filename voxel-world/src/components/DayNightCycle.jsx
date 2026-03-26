@@ -5,10 +5,13 @@ import { useGameStore } from '../store/useGameStore'
 import { Color } from 'three'
 
 export function DayNightCycle() {
-  const { scene, gl } = useThree()
+  const { scene } = useThree()
   const ambientRef = useRef()
   const dirLightRef = useRef()
   const skyRef = useRef()
+  const isLowSpec =
+    (typeof navigator !== 'undefined' && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
+    (typeof navigator !== 'undefined' && navigator.deviceMemory && navigator.deviceMemory <= 4)
 
   useFrame((_, delta) => {
     useGameStore.getState().tickTime(delta)
@@ -32,6 +35,12 @@ export function DayNightCycle() {
     if (dirLightRef.current) {
       dirLightRef.current.intensity = Math.max(0, baseIntensity * 1.5)
       dirLightRef.current.position.set(sunX, sunY, sunZ)
+      dirLightRef.current.shadow.camera.left = -40
+      dirLightRef.current.shadow.camera.right = 40
+      dirLightRef.current.shadow.camera.top = 40
+      dirLightRef.current.shadow.camera.bottom = -40
+      dirLightRef.current.shadow.camera.near = 1
+      dirLightRef.current.shadow.camera.far = 180
     }
 
     // Fog & sky color
@@ -61,8 +70,9 @@ export function DayNightCycle() {
         position={[100, 100, 20]}
         intensity={1.5}
         castShadow
-        shadow-mapSize={[1024, 1024]}
+        shadow-mapSize={isLowSpec ? [1024, 1024] : [1536, 1536]}
         shadow-bias={-0.0001}
+        shadow-normalBias={0.03}
       />
       <Sky
         ref={skyRef}

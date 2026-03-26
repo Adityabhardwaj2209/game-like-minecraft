@@ -1,14 +1,13 @@
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { useRef, useMemo } from 'react'
 import { useGameStore } from '../store/useGameStore'
-import { BufferGeometry, Float32BufferAttribute, AdditiveBlending } from 'three'
+import { AdditiveBlending } from 'three'
 import { useStore } from '../store/useStore'
 import { sounds } from '../utils/sounds'
 
 const RAIN_COUNT = 1000
 
 export function Weather() {
-  const { camera } = useThree()
   const rainRef = useRef()
   
   const positions = useMemo(() => {

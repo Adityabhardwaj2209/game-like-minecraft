@@ -50,6 +50,7 @@ const InstancedBlocks = ({ type, texture, cubes }) => {
 
 export function Cubes() {
   const cubes = useStore((state) => state.cubes)
+  const cubesMap = useStore((state) => state.cubesMap)
   const addCube = useStore((state) => state.addCube)
   const removeCube = useStore((state) => state.removeCube)
   const missionProgress = useMissionStore(s => s.progress)
@@ -69,6 +70,7 @@ export function Cubes() {
         const center = e.point.clone().sub(normal.clone().multiplyScalar(0.5)).round()
         
         if (e.button === 0) {
+          const blockHit = cubesMap[`${center.x},${center.y},${center.z}`]
           removeCube(center.x, center.y, center.z)
           sounds.blockBreak(blockHit?.type)
           missionProgress('destroy_base', 1)

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { EffectComposer, SSAO } from '@react-three/postprocessing'
+import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
+import { PCFShadowMap, ACESFilmicToneMapping } from 'three'
 import { Player } from './components/Player.jsx'
 import { Cubes } from './components/Cubes.jsx'
 import { Hotbar } from './components/Hotbar.jsx'
@@ -26,6 +27,9 @@ function App() {
   const { particles, setParticles, spawnParticles } = useParticles()
   const [drops, setDrops] = useState([])
   const [gameStarted, setGameStarted] = useState(false)
+  const isLowSpec =
+    (typeof navigator !== 'undefined' && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
+    (typeof navigator !== 'undefined' && navigator.deviceMemory && navigator.deviceMemory <= 4)
 
   return (
     <>
@@ -49,7 +53,22 @@ function App() {
       <StoryCinematics />
       <TransportHUD />
 
-      <Canvas shadows camera={{ position: [0, 5, 10], fov: 60 }} onContextMenu={(e) => e.preventDefault()}>
+      <Canvas
+        shadows
+        dpr={isLowSpec ? [1, 1.2] : [1, 1.5]}
+        gl={{
+          antialias: true,
+          powerPreference: 'high-performance',
+          toneMapping: ACESFilmicToneMapping
+        }}
+        onCreated={({ gl }) => {
+          gl.shadowMap.enabled = true
+          gl.shadowMap.type = PCFShadowMap
+          gl.toneMappingExposure = 1.05
+        }}
+        camera={{ position: [0, 5, 10], fov: 60, near: 0.1, far: 220 }}
+        onContextMenu={(e) => e.preventDefault()}
+      >
         <fog attach="fog" args={['#87CEEB', 15, 50]} />
 
         <DayNightCycle />
@@ -66,9 +85,12 @@ function App() {
         <Drops drops={drops} setDrops={setDrops} />
         <ParticleSystem particles={particles} setParticles={setParticles} />
 
-        <EffectComposer multisampling={0}>
-          <SSAO samples={21} radius={0.15} intensity={15} luminanceInfluence={0.6} color="black" />
-        </EffectComposer>
+        {!isLowSpec && (
+          <EffectComposer multisampling={2}>
+            <Bloom intensity={0.14} luminanceThreshold={0.72} luminanceSmoothing={0.5} />
+            <Vignette eskil={false} offset={0.2} darkness={0.35} />
+          </EffectComposer>
+        )}
       </Canvas>
     </>
   )

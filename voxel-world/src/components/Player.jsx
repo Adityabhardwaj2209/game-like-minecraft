@@ -5,7 +5,7 @@ import { Vector3, Euler } from 'three'
 import { useKeyboard } from '../hooks/useKeyboard'
 import { useStore } from '../store/useStore'
 import { useGameStore } from '../store/useGameStore'
-import { checkVoxelCollision, getHighestBlockY } from '../utils/physics'
+import { checkVoxelCollision, getHighestWalkableBlockY } from '../utils/physics'
 import { sounds, resumeAudio } from '../utils/sounds'
 import { grassTexture, dirtTexture, stoneTexture, woodTexture, glassTexture, waterTexture, leavesTexture } from '../textures'
 
@@ -62,7 +62,7 @@ export function Player({ onBlockBreak }) {
   const isGrounded = useRef(false)
   
   // Start exactly on top of the ground
-  const startingY = getHighestBlockY(0, 0, useStore.getState().cubesMap) + 2
+  const startingY = getHighestWalkableBlockY(0, 0, useStore.getState().cubesMap) + 2
   const position = useRef(new Vector3(0, startingY, 0)) 
   
   const avatarRef = useRef()
